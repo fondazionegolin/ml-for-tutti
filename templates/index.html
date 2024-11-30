@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero Section -->
+    <div class="text-center mb-20">
+        <h1 class="text-5xl sm:text-6xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+            Machine Learning per Tutti
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Scopri il potere dell'intelligenza artificiale attraverso esempi pratici e interattivi.
+            La nostra piattaforma ti guida nell'apprendimento del machine learning, 
+            rendendo concetti complessi accessibili a tutti.
+        </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <!-- Regressione -->
+        <div class="bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-rose-100">
+            <div class="p-8">
+                <div class="w-14 h-14 bg-rose-100 rounded-xl mb-6 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Regressione</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Esplora l'arte della predizione numerica. Impara a prevedere valori come prezzi delle case, 
+                    temperature future o andamenti di mercato. Scopri come i modelli di regressione trovano 
+                    pattern nascosti nei dati per fare previsioni accurate.
+                </p>
+                <a href="/regressione" class="inline-flex items-center text-rose-600 hover:text-rose-700 font-medium">
+                    Inizia ad analizzare 
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Classificazione Dati -->
+        <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-violet-100">
+            <div class="p-8">
+                <div class="w-14 h-14 bg-violet-100 rounded-xl mb-6 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Classificazione Dati</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Scopri come l'AI può categorizzare automaticamente informazioni. Dai sentiment analysis 
+                    alla classificazione di email, esplora come i modelli imparano a riconoscere pattern 
+                    e assegnare categorie corrette ai dati.
+                </p>
+                <a href="/classificazione" class="inline-flex items-center text-violet-600 hover:text-violet-700 font-medium">
+                    Inizia a classificare
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Classificazione Immagini -->
+        <div class="bg-gradient-to-br from-sky-50 to-blue-50 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-sky-100">
+            <div class="p-8">
+                <div class="w-14 h-14 bg-sky-100 rounded-xl mb-6 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Classificazione Immagini</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Entra nel mondo della computer vision. Scopri come l'AI può riconoscere oggetti, 
+                    volti e scene in immagini. Sperimenta con reti neurali convoluzionali e comprendi 
+                    come le macchine "vedono" il mondo.
+                </p>
+                <a href="/classificazione-immagini" class="inline-flex items-center text-sky-600 hover:text-sky-700 font-medium">
+                    Esplora la visione
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Chatbot -->
+        <div class="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-emerald-100">
+            <div class="p-8">
+                <div class="w-14 h-14 bg-emerald-100 rounded-xl mb-6 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Chatbot AI</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Dialoga con un'intelligenza artificiale avanzata. Scopri come i modelli linguistici 
+                    comprendono e generano testo, rispondono a domande e mantengono conversazioni 
+                    naturali e contestuali.
+                </p>
+                <a href="/chatbot" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
+                    Inizia a chattare
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Generazione Immagini -->
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-amber-100">
+            <div class="p-8">
+                <div class="w-14 h-14 bg-amber-100 rounded-xl mb-6 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Generazione Immagini</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Trasforma le tue idee in arte digitale. Utilizza modelli di AI all'avanguardia per 
+                    creare immagini uniche partendo da descrizioni testuali. Esplora stili diversi e 
+                    dai vita alla tua creatività.
+                </p>
+                <a href="/generazione-immagini" class="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium">
+                    Inizia a creare
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-12 text-white text-center">
+        <h2 class="text-3xl font-bold mb-6">Inizia il tuo viaggio nell'AI</h2>
+        <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
+            Scegli uno dei nostri moduli interattivi e immergiti nel mondo dell'intelligenza artificiale.
+            Non serve esperienza di programmazione, solo curiosità e voglia di imparare!
+        </p>
+        <div class="space-x-4">
+            <a href="/regressione" class="inline-block bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-colors duration-300 shadow-lg">
+                Inizia con la Regressione
+            </a>
+            <a href="/classificazione" class="inline-block bg-transparent text-white px-8 py-4 rounded-xl font-semibold border-2 border-white hover:bg-white hover:text-purple-600 transition-colors duration-300">
+                Esplora la Classificazione
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
