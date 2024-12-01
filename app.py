@@ -19,6 +19,7 @@ from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropou
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import time
 
 # Import dei blueprint
 from routes.chatbot import chatbot

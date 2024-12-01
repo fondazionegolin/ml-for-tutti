@@ -4,26 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ML per Tutti</title>
-    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- MathJax per le formule matematiche -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -60,42 +46,65 @@
             overflow: hidden;
         }
 
+        /* Stili per la navbar */
         .navbar-gradient {
-            background: linear-gradient(90deg, rgba(236,72,153,0.1) 0%, rgba(167,139,250,0.1) 35%, rgba(59,130,246,0.1) 70%, rgba(249,115,22,0.1) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: linear-gradient(90deg, 
+                #F7FAFC 0%,    /* gray-50 */
+                #EDF2F7 50%,   /* gray-100 */
+                #E2E8F0 100%   /* gray-200 */
+            );
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
+        /* Stili per il logo */
+        .gradient-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            background: linear-gradient(
+                90deg,
+                #FF6B6B 0%,      /* Rosso corallo */
+                #4ECDC4 50%,     /* Turchese */
+                #45B7D1 100%     /* Azzurro */
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding-right: 1rem;
+        }
+
+        /* Stili per i link della navbar */
         .nav-link {
+            @apply px-6 py-2 transition-all duration-300;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px !important;
+            font-weight: 900 !important;
+            line-height: 4rem;
             position: relative;
-            color: #4B5563;
-            transition: all 0.3s ease;
+            padding-bottom: 1.5rem;
+            color: #4A5568;
         }
 
         .nav-link:hover {
-            color: #1F2937;
+            color: #1A202C;
+            transform: translateY(-1px);
         }
 
-        .nav-link::after {
+        /* Active state */
+        .nav-link.active {
+            color: #2D3748;
+        }
+
+        .nav-link.active::after {
             content: '';
             position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background: linear-gradient(90deg, #EC4899 0%, #A78BFA 35%, #3B82F6 70%, #F97316 100%);
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            bottom: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 3px;
+            background-color: #4A5568;
+            border-radius: 50%;
         }
 
         /* Stili globali per input e textarea */
@@ -180,37 +189,35 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
+<body class="min-h-screen bg-gray-50">
     <!-- Navbar -->
-    <nav class="bg-white shadow-lg fixed w-full z-50 top-0">
+    <nav class="navbar-gradient shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="/" class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
-                            ML per Tutti
-                        </a>
-                    </div>
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="/" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="gradient-text">Play AI</span>
+                </div>
+                <div class="hidden sm:flex items-center">
+                    <div class="space-x-6">
+                        <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">
                             Home
                         </a>
-                        <a href="/regressione" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/regressione" class="nav-link {% if request.path == '/regressione' %}active{% endif %}">
                             Regressione
                         </a>
-                        <a href="/classificazione" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/classificazione" class="nav-link {% if request.path == '/classificazione' %}active{% endif %}">
                             Classificazione Dati
                         </a>
-                        <a href="/classificazione-immagini" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/classificazione-immagini" class="nav-link {% if request.path == '/classificazione-immagini' %}active{% endif %}">
                             Classificazione Immagini
                         </a>
-                        <a href="/chatbot" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/chatbot" class="nav-link {% if request.path == '/chatbot' %}active{% endif %}">
                             Chatbot
                         </a>
-                        <a href="/generazione-immagini" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/generazione-immagini" class="nav-link {% if request.path == '/generazione-immagini' %}active{% endif %}">
                             Generazione Immagini
                         </a>
-                        <a href="/learning" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                        <a href="/learning" class="nav-link {% if request.path == '/learning' %}active{% endif %}">
                             Learning
                         </a>
                     </div>
@@ -228,13 +235,13 @@
         <!-- Mobile menu -->
         <div class="mobile-menu sm:hidden hidden" id="mobile-menu">
             <div class="pt-2 pb-3 space-y-1">
-                <a href="/" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Home</a>
-                <a href="/regressione" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Regressione</a>
-                <a href="/classificazione" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Classificazione Dati</a>
-                <a href="/classificazione-immagini" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Classificazione Immagini</a>
-                <a href="/chatbot" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Chatbot</a>
-                <a href="/generazione-immagini" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Generazione Immagini</a>
-                <a href="/learning" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Learning</a>
+                <a href="/" class="nav-link block px-3 py-2 {% if request.path == '/' %}active{% endif %}">Home</a>
+                <a href="/regressione" class="nav-link block px-3 py-2 {% if request.path == '/regressione' %}active{% endif %}">Regressione</a>
+                <a href="/classificazione" class="nav-link block px-3 py-2 {% if request.path == '/classificazione' %}active{% endif %}">Classificazione Dati</a>
+                <a href="/classificazione-immagini" class="nav-link block px-3 py-2 {% if request.path == '/classificazione-immagini' %}active{% endif %}">Classificazione Immagini</a>
+                <a href="/chatbot" class="nav-link block px-3 py-2 {% if request.path == '/chatbot' %}active{% endif %}">Chatbot</a>
+                <a href="/generazione-immagini" class="nav-link block px-3 py-2 {% if request.path == '/generazione-immagini' %}active{% endif %}">Generazione Immagini</a>
+                <a href="/learning" class="nav-link block px-3 py-2 {% if request.path == '/learning' %}active{% endif %}">Learning</a>
             </div>
         </div>
     </nav>
