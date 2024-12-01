@@ -127,45 +127,62 @@
 
 <script>
     let currentChatId = null;
-    let chats = [];
+    let chatMessages = [];
 
-    // Aggiorna il valore della temperatura
-    document.getElementById('temperature').addEventListener('input', function(e) {
-        document.getElementById('temperature-value').textContent = e.target.value;
-    });
+    // Carica le chat all'avvio
+    loadChats();
 
     async function loadChats() {
         try {
-            const response = await fetch('/api/load_chats');
-            const chatsData = await response.json();
-            chats = chatsData;
-            updateChatList();
+            const response = await fetch('/load_chats');
+            const chats = await response.json();
+            updateChatList(chats);
         } catch (error) {
             console.error('Errore nel caricamento delle chat:', error);
         }
     }
 
-    function updateChatList() {
+    function updateChatList(chats) {
         const chatList = document.getElementById('chat-list');
         chatList.innerHTML = '';
         
         chats.forEach(chat => {
             const div = document.createElement('div');
-            div.className = chat.id === currentChatId ? 'active' : '';
-            div.setAttribute('data-chat-id', chat.id);
+            div.className = `p-3 hover:bg-gray-200 cursor-pointer ${chat.id === currentChatId ? 'bg-gray-200' : ''}`;
             div.textContent = chat.title || 'Nuova conversazione';
             div.onclick = () => loadChat(chat.id);
             chatList.appendChild(div);
         });
     }
 
+    async function loadChat(chatId) {
+        try {
+            const response = await fetch(`/load_chat/${chatId}`);
+            const data = await response.json();
+            
+            currentChatId = chatId;
+            chatMessages = data.messages;
+            
+            // Aggiorna UI
+            document.getElementById('chat-messages').innerHTML = '';
+            chatMessages.forEach(msg => {
+                if (msg.role !== 'system') {
+                    addMessageToChat(msg.role, msg.content);
+                }
+            });
+            
+            // Aggiorna la lista chat
+            await loadChats();
+        } catch (error) {
+            console.error('Errore nel caricamento della chat:', error);
+        }
+    }
+
     function newChat() {
         currentChatId = null;
-        chats = [];
+        chatMessages = [];
         document.getElementById('chat-messages').innerHTML = '';
         document.getElementById('system-prompt').value = '';
-        document.getElementById('temperature').value = '0.7';
-        document.getElementById('temperature-value').textContent = '0.7';
     }
 
     async function initializeChat() {
@@ -173,111 +190,71 @@
         if (!systemPrompt) return;
 
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch('/initialize_chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    system_prompt: systemPrompt,
-                    message: "Ciao! Presentati e spiegami come mi aiuterai in base alla personalità che ti ho assegnato.",
-                    temperature: document.getElementById('temperature').value
+                    system_prompt: systemPrompt
                 })
             });
 
             const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error);
-            }
+            if (data.error) throw new Error(data.error);
 
-            // Cancella i messaggi esistenti
-            document.getElementById('chat-messages').innerHTML = '';
+            currentChatId = data.chat_id;
+            chatMessages = data.messages;
             
-            // Aggiungi la risposta del bot
-            addMessageToChat('assistant', data.response);
-
-            // Salva la chat
-            chats.push({
-                id: data.chat_id,
-                title: data.title,
-                messages: [{
-                    role: 'assistant',
-                    content: data.response,
-                    timestamp: data.timestamp
-                }]
-            });
-
-            await saveChat();
+            // Aggiorna UI
+            document.getElementById('chat-messages').innerHTML = '';
+            addMessageToChat('assistant', data.initial_message);
+            
+            // Ricarica lista chat
+            await loadChats();
         } catch (error) {
-            console.error('Errore:', error);
-            addMessageToChat('system', 'Errore: ' + error.message);
+            console.error('Errore nell\'inizializzazione della chat:', error);
+            alert('Si è verificato un errore nell\'inizializzazione della chat');
         }
     }
 
     async function sendMessage() {
-        const messageInput = document.getElementById('user-input');
-        const message = messageInput.value.trim();
+        const userInput = document.getElementById('user-input');
+        const message = userInput.value.trim();
         if (!message) return;
-
-        const systemPrompt = document.getElementById('system-prompt').value.trim();
-        const temperature = document.getElementById('temperature').value;
 
         // Aggiungi il messaggio dell'utente alla chat
         addMessageToChat('user', message);
-        messageInput.value = '';
+        userInput.value = '';
 
         try {
-            const response = await fetch('/api/chat', {
+            // Aggiungi il messaggio dell'utente all'array dei messaggi
+            chatMessages.push({"role": "user", "content": message});
+
+            const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    system_prompt: systemPrompt,
-                    message: message,
-                    temperature: temperature
+                    messages: chatMessages,
+                    chat_id: currentChatId
                 })
             });
 
             const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error);
-            }
+            if (data.error) throw new Error(data.error);
 
-            // Format e aggiungi la risposta del bot
-            const formattedResponse = formatResponse(data.response);
-            addMessageToChat('assistant', formattedResponse);
-
-            // Salva la chat
-            const chatIndex = chats.findIndex(chat => chat.id === currentChatId);
-            if (chatIndex !== -1) {
-                chats[chatIndex].messages.push({
-                    role: 'user',
-                    content: message,
-                    timestamp: new Date().toISOString()
-                });
-                chats[chatIndex].messages.push({
-                    role: 'assistant',
-                    content: formattedResponse,
-                    timestamp: data.timestamp
-                });
-            }
-
-            await saveChat();
+            // Aggiungi la risposta del bot all'array dei messaggi e alla chat
+            chatMessages.push({"role": "assistant", "content": data.message});
+            addMessageToChat('assistant', data.message);
+            
+            // Ricarica lista chat per aggiornare i titoli
+            await loadChats();
         } catch (error) {
-            console.error('Errore:', error);
-            addMessageToChat('system', 'Errore: ' + error.message);
+            console.error('Errore nell\'invio del messaggio:', error);
+            alert('Si è verificato un errore nell\'invio del messaggio');
         }
-    }
-
-    function formatResponse(text) {
-        // Decodifica le entità HTML
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = text;
-        text = textarea.value;
-        
-        // Sostituisci gli a capo con <br>
-        return text.replace(/\n/g, '<br>');
     }
 
     function addMessageToChat(role, content) {
@@ -289,68 +266,9 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    async function saveChat() {
-        if (chats.length === 0) return;
-
-        try {
-            const response = await fetch('/api/save_chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: chats[0].title,
-                    messages: chats[0].messages,
-                    system_prompt: document.getElementById('system-prompt').value,
-                    temperature: document.getElementById('temperature').value,
-                    timestamp: new Date().toISOString()
-                })
-            });
-
-            const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error);
-            }
-
-            currentChatId = data.chat_id;
-            await loadChats();
-        } catch (error) {
-            console.error('Errore nel salvataggio della chat:', error);
-        }
+    function formatResponse(text) {
+        return text.replace(/\n/g, '<br>');
     }
-
-    async function loadChat(chatId) {
-        // Rimuovi la classe active da tutte le chat
-        document.querySelectorAll('#chat-list > div').forEach(div => {
-            div.classList.remove('active');
-        });
-        
-        // Aggiungi la classe active alla chat selezionata
-        const selectedChat = document.querySelector(`#chat-list > div[data-chat-id="${chatId}"]`);
-        if (selectedChat) {
-            selectedChat.classList.add('active');
-        }
-
-        try {
-            const response = await fetch(`/api/load_chats/${chatId}`);
-            const chat = await response.json();
-            
-            currentChatId = chatId;
-            document.getElementById('system-prompt').value = chat.system_prompt;
-            document.getElementById('temperature').value = chat.temperature;
-            document.getElementById('temperature-value').textContent = chat.temperature;
-            
-            document.getElementById('chat-messages').innerHTML = '';
-            chat.messages.forEach(msg => {
-                addMessageToChat(msg.role, msg.content);
-            });
-        } catch (error) {
-            console.error('Errore nel caricamento della chat:', error);
-        }
-    }
-
-    // Inizializza
-    loadChats();
 
     // Gestisci il tasto Invio nell'area di testo
     document.getElementById('user-input').addEventListener('keypress', function(e) {

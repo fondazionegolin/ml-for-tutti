@@ -44,4 +44,8 @@
   .nav-link[href="/generazione-immagini"] {
     @apply text-indigo-600 hover:border-indigo-500;
   }
+  
+  .nav-link[href="/learning"] {
+    @apply text-teal-600 hover:border-teal-500;
+  }
 }

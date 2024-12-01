@@ -8,6 +8,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax per le formule matematiche -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -133,6 +149,35 @@
             background-color: #EF4444;
             color: white;
         }
+
+        /* Stili per le formule matematiche */
+        .MathJax {
+            font-size: 1.1em !important;
+        }
+        mjx-container {
+            padding: 0.5em 0;
+        }
+        /* Stili per il contenuto generato */
+        .prose {
+            max-width: none;
+            line-height: 1.6;
+        }
+        .prose p {
+            margin-bottom: 1.5em;
+        }
+        .prose pre {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .prose code {
+            font-family: ui-monospace, monospace;
+            font-size: 0.9em;
+            background-color: #f3f4f6;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
@@ -165,6 +210,9 @@
                         <a href="/generazione-immagini" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
                             Generazione Immagini
                         </a>
+                        <a href="/learning" class="nav-link inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Learning
+                        </a>
                     </div>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
@@ -186,6 +234,7 @@
                 <a href="/classificazione-immagini" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Classificazione Immagini</a>
                 <a href="/chatbot" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Chatbot</a>
                 <a href="/generazione-immagini" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Generazione Immagini</a>
+                <a href="/learning" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50">Learning</a>
             </div>
         </div>
     </nav>

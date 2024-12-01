@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
+from openai import OpenAI
 import os
-import pandas as pd
+from dotenv import load_dotenv
+import json
 import numpy as np
+from PIL import Image
+import io
+import requests
+import base64
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
@@ -11,23 +18,22 @@ from tensorflow.keras.models import Sequential, Model, load_model
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from werkzeug.utils import secure_filename
-from PIL import Image
-import io
-from dotenv import load_dotenv
-from openai import OpenAI
 from datetime import datetime
-import json
-import time
-import requests
-import base64
+
+# Import dei blueprint
+from routes.chatbot import chatbot
+from routes.learning import learning
 
 load_dotenv()
-
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
+
+# Registrazione dei blueprint
+app.register_blueprint(chatbot, url_prefix='')  # No prefix per mantenere gli URL come prima
+app.register_blueprint(learning, url_prefix='')
 
 # Variabili globali per i modelli
 model = None
@@ -72,10 +78,6 @@ def classificazione():
 @app.route('/classificazione-immagini')
 def classificazione_immagini():
     return render_template('classificazione_immagini.html')
-
-@app.route('/chatbot')
-def chatbot():
-    return render_template('chatbot.html')
 
 @app.route('/generazione-immagini')
 def generazione_immagini():
@@ -432,69 +434,6 @@ def generate_image():
 
     except Exception as e:
         print(f"Error in generate_image: {str(e)}")  # For debugging
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    data = request.json
-    system_prompt = data.get('system_prompt', '')
-    message = data.get('message', '')
-    temperature = float(data.get('temperature', 0.7))
-    
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": message}
-            ],
-            temperature=temperature
-        )
-        
-        return jsonify({
-            'response': response.choices[0].message.content,
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/save_chat', methods=['POST'])
-def save_chat():
-    data = request.json
-    chat_id = datetime.now().strftime('%Y%m%d_%H%M%S')
-    
-    try:
-        with open(f'chats/{chat_id}.json', 'w') as f:
-            json.dump(data, f)
-        return jsonify({'chat_id': chat_id})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/load_chats', methods=['GET'])
-def load_chats():
-    try:
-        chats = []
-        if not os.path.exists('chats'):
-            os.makedirs('chats')
-        for filename in os.listdir('chats'):
-            if filename.endswith('.json'):
-                with open(f'chats/{filename}', 'r') as f:
-                    chat_data = json.load(f)
-                    chats.append({
-                        'id': filename[:-5],
-                        'title': chat_data.get('title', 'Untitled Chat'),
-                        'timestamp': chat_data.get('timestamp')
-                    })
-        return jsonify(sorted(chats, key=lambda x: x['timestamp'], reverse=True))
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/load_chats/<chat_id>', methods=['GET'])
-def load_chat(chat_id):
-    try:
-        with open(f'chats/{chat_id}.json', 'r') as f:
-            return jsonify(json.load(f))
-    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/translate-enhance-prompt', methods=['POST'])
