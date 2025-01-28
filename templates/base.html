@@ -101,21 +101,39 @@
             bottom: 0.5rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 3px;
-            height: 3px;
-            background-color: #4A5568;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
+            opacity: 0.8;
         }
 
-        /* Stili globali per input e textarea */
-        input[type="text"],
-        input[type="number"],
-        input[type="email"],
-        input[type="password"],
-        input[type="file"],
-        textarea,
-        select {
-            @apply rounded-[20px] bg-gray-100 border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500;
+        /* Colori specifici per i pallini */
+        .nav-link[href="/"].active::after {
+            background-color: #059669; /* emerald-600 */
+        }
+        
+        .nav-link[href="/regressione"].active::after {
+            background-color: #2563EB; /* blue-600 */
+        }
+        
+        .nav-link[href="/classificazione"].active::after {
+            background-color: #7C3AED; /* violet-600 */
+        }
+        
+        .nav-link[href="/classificazione-immagini"].active::after {
+            background-color: #DB2777; /* pink-600 */
+        }
+        
+        .nav-link[href="/chatbot"].active::after {
+            background-color: #D97706; /* amber-600 */
+        }
+        
+        .nav-link[href="/generazione-immagini"].active::after {
+            background-color: #4F46E5; /* indigo-600 */
+        }
+        
+        .nav-link[href="/learning"].active::after {
+            background-color: #0D9488; /* teal-600 */
         }
 
         /* Input file personalizzato */
